@@ -65,19 +65,19 @@ class _EditProductState extends State<EditProduct> {
   TextEditingController categoryController = TextEditingController();
   TextEditingController subCategoryController = TextEditingController();
   final TextEditingController productNameController = TextEditingController();
-  final TextEditingController productPriceController = TextEditingController();
-  final TextEditingController productColorController = TextEditingController();
-  final TextEditingController productTitle1Controller = TextEditingController();
-  final TextEditingController productTitleDetail1Controller = TextEditingController();
-  final TextEditingController productTitle2Controller = TextEditingController();
-  final TextEditingController productTitleDetail2Controller = TextEditingController();
-  final TextEditingController productTitle3Controller = TextEditingController();
-  final TextEditingController productTitleDetail3Controller = TextEditingController();
-  final TextEditingController productTitle4Controller = TextEditingController();
-  final TextEditingController productTitleDetail4Controller = TextEditingController();
-  final TextEditingController productDescriptionController = TextEditingController();
-  final TextEditingController productNewPriceController = TextEditingController();
-  final TextEditingController productDiscountController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController colorController = TextEditingController();
+  final TextEditingController title1Controller = TextEditingController();
+  final TextEditingController product1Controller = TextEditingController();
+  final TextEditingController title2Controller = TextEditingController();
+  final TextEditingController product2Controller = TextEditingController();
+  final TextEditingController title3Controller = TextEditingController();
+  final TextEditingController product3Controller = TextEditingController();
+  final TextEditingController title4Controller = TextEditingController();
+  final TextEditingController product4Controller = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController newpriceController = TextEditingController();
+  final TextEditingController discountController = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -87,19 +87,20 @@ class _EditProductState extends State<EditProduct> {
     selectCategory = widget.product.category.toString();
     selectedBrand = widget.product.brand.toString();
     productNameController.text = widget.product.productName.toString();
-    productPriceController.text = widget.product.productPrice.toString();
-    productColorController.text = widget.product.color.toString();
-    productTitle1Controller.text = widget.product.title1.toString();
-    productTitleDetail1Controller.text = widget.product.product1.toString();
-    productTitle2Controller.text = widget.product.title2.toString();
-    productTitleDetail2Controller.text = widget.product.product2.toString();
-    productTitle3Controller.text = widget.product.title3.toString();
-    productTitleDetail3Controller.text = widget.product.product3.toString();
-    productTitle4Controller.text = widget.product.title4.toString();
-    productTitleDetail4Controller.text = widget.product.product4.toString();
-    productDescriptionController.text = widget.product.productDescription.toString();
-    productNewPriceController.text = widget.product.newPrice.toString();
-    productDiscountController.text = widget.product.discount.toString();
+    priceController.text = widget.product.productPrice.toString();
+    colorController.text = widget.product.color.toString();
+    title1Controller.text = widget.product.title1.toString();
+    product1Controller.text = widget.product.product1.toString();
+    title2Controller.text = widget.product.title2.toString();
+    product2Controller.text = widget.product.product2.toString();
+    title3Controller.text = widget.product.title3.toString();
+    product3Controller.text = widget.product.product3.toString();
+    title4Controller.text = widget.product.title4.toString();
+    product4Controller.text = widget.product.product4.toString();
+    descriptionController.text = widget.product.productDescription.toString();
+    newpriceController.text = widget.product.newPrice.toString();
+    discountController.text = widget.product.discount.toString();
+    final color = colorController.text.trim();
 
   }
 
@@ -108,61 +109,64 @@ class _EditProductState extends State<EditProduct> {
       isLoading = true;
     });
 
-    DocumentReference productref = FirebaseFirestore.instance.collection('Products').doc(widget.product.id);
+    DocumentReference productRef = FirebaseFirestore.instance.collection('Products').doc(widget.product.id);
 
     List<String> imageUrls = [];
 
     if (selectedImage != null) {
-      for (File imageFile in selectedImage!){
-        String imageUrl = await uploadImageToUpload(imageFile);
+      for (File imageFile in selectedImage!) {
+        String imageUrl = await uploadImageToStorage(imageFile);
         imageUrls.add(imageUrl);
       }
     }
 
     Map<String, dynamic> updatedData = {
-
-      'productName' : productNameController.text,
-      'priceController' : productPriceController.text,
-      'discountController': productDiscountController.text,
-      'productNewPriceController': productNewPriceController.text,
-      'productColorController': productColorController.text,
-      'productTitleDetail1Controller': productTitleDetail1Controller.text,
-      'productTitleDetail2Controller': productTitleDetail2Controller.text,
-      'productTitleDetail3Controller': productTitleDetail3Controller.text,
-      'productTitleDetail4Controller': productTitleDetail4Controller.text,
-      'productTitle1Controller': productTitle1Controller.text,
-      'productTitle2Controller': productTitle2Controller.text,
-      'productTitle3Controller': productTitle3Controller.text,
-      'productTitle4Controller': productTitle4Controller.text,
-      'productDescriptionController': productDescriptionController.text,
-      // 'category': selectedCategory,
-      // 'subCategory': selectedBrand,
-
+      'productName': productNameController.text,
+      'price': priceController.text,
+      'discount': discountController.text,
+      'productNewPrice': newpriceController.text,
+      'productColor': colorController.text,
+      'productTitleDetail1': title1Controller.text,
+      'productTitleDetail2': title2Controller.text,
+      'productTitleDetail3': title3Controller.text,
+      'productTitleDetail4': title4Controller.text,
+      'productTitle1': product1Controller.text,
+      'productTitle2': product2Controller.text,
+      'productTitle3': product3Controller.text,
+      'productTitle4': product4Controller.text,
+      'productDescription': descriptionController.text,
+      if (imageUrls.isNotEmpty) 'images': imageUrls,
     };
 
-     try{
-      await productref.update(updatedData);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Product Edited Successfully'),
-      backgroundColor: Colors.cyan,
-       )
+    try {
+      await productRef.update(updatedData);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Product Edited Successfully'),
+          backgroundColor: Colors.cyan,
+        ),
       );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update product'),
+        ),
+      );
+    } finally {
       setState(() {
-
+        isLoading = false;
       });
-     } catch(error){
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to update product'),
-        )
-      );
-     } finally {
-       setState(() {
-         isLoading = false;
-       });
-     }
+    }
   }
 
-  Future<String> uploadImageToUpload(File imageFile) async {
-    Reference storageref = FirebaseStorage.instance.ref().child('Product_images/${widget.product.id}');
-    return await storageref.getDownloadURL();
+
+  Future<String> uploadImageToStorage(File imageFile) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference storageRef = FirebaseStorage.instance.ref().child('Product_images/$fileName');
+    UploadTask uploadTask = storageRef.putFile(imageFile);
+    TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => null);
+    String downloadUrl = await storageSnapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 
   @override
@@ -185,12 +189,30 @@ class _EditProductState extends State<EditProduct> {
               const SizedBox(height: 20,),
 
               if (selectedImage != null && selectedImage!.isNotEmpty)
-                  Image.file(selectedImage! [0], height: 200, width: 200,)
-                  else Image.network(
-                widget.images,
-                width: 200,
-                height: 200,
-              ),
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: selectedImage!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 200, // Set a fixed width for each image
+                          child: Image.file(selectedImage![index], height: 200, width: 200),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              else
+                Image.network(
+                  widget.images,
+                  width: 200,
+                  height: 200,
+                ),
+
+
               const SizedBox(height: 20,),
 
               Container(
@@ -198,8 +220,8 @@ class _EditProductState extends State<EditProduct> {
                 child: ElevatedButton(onPressed: () async {
                   ImagePicker imagepicker = ImagePicker();
                  List<XFile>? files = await imagepicker.pickMultiImage();
-                  // if(files == null)
-                  //   return;
+                  if(files == null)
+                    return;
                   selectedImage = files.map((file) => File(file.path)).toList();
                   setState(() {
 
@@ -235,7 +257,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productPriceController,
+                  controller: priceController,
                   decoration: InputDecoration(
                     labelText: 'Price',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -253,7 +275,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productDiscountController,
+                  controller: discountController,
                   decoration: InputDecoration(
                     labelText: 'Discount',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -271,7 +293,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productNewPriceController,
+                  controller: newpriceController,
                   decoration: InputDecoration(
                     labelText: 'New Price',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -289,7 +311,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productColorController,
+                  controller: colorController,
                   decoration: InputDecoration(
                     labelText: 'Edit Color',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -305,9 +327,29 @@ class _EditProductState extends State<EditProduct> {
               ),
               const SizedBox(height: 20,),
 
+
+
+
               Container(
                 child: TextFormField(
-                  controller: productTitleDetail1Controller,
+                  controller: title1Controller,
+                  decoration: InputDecoration(
+                    labelText: 'Title 1',
+                    labelStyle: const TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20,),
+              Container(
+                child: TextFormField(
+                  controller: product1Controller,
                   decoration: InputDecoration(
                     labelText: 'Product 1',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -325,43 +367,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productTitle1Controller,
-                  decoration: InputDecoration(
-                    labelText: 'Title 1',
-                    labelStyle: const TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: Colors.cyan),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20,),
-
-              Container(
-                child: TextFormField(
-                  controller: productTitleDetail2Controller,
-                  decoration: InputDecoration(
-                    labelText: 'Product 2',
-                    labelStyle: const TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: Colors.cyan),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20,),
-
-              Container(
-                child: TextFormField(
-                  controller: productTitle2Controller,
+                  controller: title2Controller,
                   decoration: InputDecoration(
                     labelText: 'Title 2',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -379,9 +385,9 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productTitleDetail3Controller,
+                  controller: product2Controller,
                   decoration: InputDecoration(
-                    labelText: 'Product 3',
+                    labelText: 'Product 2',
                     labelStyle: const TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
@@ -397,7 +403,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productTitle3Controller,
+                  controller: title3Controller,
                   decoration: InputDecoration(
                     labelText: 'Title 3',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -415,7 +421,42 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productTitleDetail4Controller,
+                  controller: product3Controller,
+                  decoration: InputDecoration(
+                    labelText: 'Product 3',
+                    labelStyle: const TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20,),
+
+              Container(
+                child: TextFormField(
+                  controller: title4Controller,
+                  decoration: InputDecoration(
+                    labelText: 'Title 4',
+                    labelStyle: const TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan),
+                    ),
+                  ),
+                ),
+              ),const SizedBox(height: 20,),
+
+              Container(
+                child: TextFormField(
+                  controller: product4Controller,
                   decoration: InputDecoration(
                     labelText: 'Product 4',
                     labelStyle: const TextStyle(color: Colors.black),
@@ -433,24 +474,7 @@ class _EditProductState extends State<EditProduct> {
 
               Container(
                 child: TextFormField(
-                  controller: productTitle4Controller,
-                  decoration: InputDecoration(
-                    labelText: 'Title 4',
-                    labelStyle: const TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: Colors.cyan),
-                    ),
-                  ),
-                ),
-              ),const SizedBox(height: 20,),
-
-              Container(
-                child: TextFormField(
-                  controller: productDescriptionController,
+                  controller: descriptionController,
                   decoration: InputDecoration(
                     labelText: 'Edit Description',
                     labelStyle: const TextStyle(color: Colors.black),
