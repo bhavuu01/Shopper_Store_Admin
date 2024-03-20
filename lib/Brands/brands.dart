@@ -5,7 +5,6 @@ import 'package:shopperstore/Brands/addbrands.dart';
 import 'package:shopperstore/Brands/editbrand.dart';
 import 'BrandModel.dart';
 
-
 class SubCategoryScreen extends StatefulWidget {
   const SubCategoryScreen({super.key});
 
@@ -14,9 +13,11 @@ class SubCategoryScreen extends StatefulWidget {
 }
 
 class _SubCategoryScreenState extends State<SubCategoryScreen> {
+  String _searchText = '';
 
-  void _deleteCategory(String brandID){
-    FirebaseFirestore.instance.collection('Brands')
+  void _deleteCategory(String brandID) {
+    FirebaseFirestore.instance
+        .collection('Brands')
         .doc(brandID)
         .delete()
         .then((value) {
@@ -27,14 +28,13 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         backgroundColor: Colors.green,
         textColor: Colors.white,
       );
-    }).catchError((error){
-        Fluttertoast.showToast(
+    }).catchError((error) {
+      Fluttertoast.showToast(
           msg: 'Failed to delete brand',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.red,
-          textColor: Colors.white
-        );
+          textColor: Colors.white);
     });
   }
 
@@ -42,9 +42,13 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Brands',style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),),
+        title: const Text(
+          'Brands',
+          style: TextStyle(
+              fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         backgroundColor: Colors.cyan,
-          centerTitle: true,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -52,16 +56,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              // SizedBox(height: 20,),
-              // ElevatedButton(onPressed: (){
-              //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddCategory(),));
-              // }, style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),)),
-              //     child: const Text('Add Category', style: TextStyle(color: Colors.white),)),
-
-              const SizedBox(height: 10,),
-
-
+              const SizedBox(
+                height: 10,
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.cyan.withOpacity(.1),
@@ -71,9 +68,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
-
                     onChanged: (value) {
                       setState(() {
+                        _searchText = value.toLowerCase();
                       });
                     },
                     decoration: const InputDecoration(
@@ -85,33 +82,40 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 20,),
-              BrandList(deleteCategory: _deleteCategory,),
-
-              // BrandsScreen(deleteCategory: _deleteCategory),
-
+              const SizedBox(
+                height: 20,
+              ),
+              BrandList(
+                deleteCategory: _deleteCategory,
+                searchText: _searchText,
+              ),
             ],
-
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(backgroundColor: Colors.cyan,
-         onPressed: () {
-           Navigator.push(context, MaterialPageRoute(builder: (context) => const AddBrands(),));
-         },
-         child: const Icon(Icons.add,color: Colors.black,size: 25.0),
-       ),
-       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.cyan,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddBrands(),
+              ));
+        },
+        child: const Icon(Icons.add, color: Colors.black, size: 25.0),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
 
 class BrandList extends StatelessWidget {
-
-  // const CategoryList({super.key});
   final Function(String) deleteCategory;
-  const BrandList({Key? key, required this.deleteCategory}) : super (key: key);
+  final String searchText;
+
+  const BrandList({Key? key, required this.deleteCategory, required this.searchText})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -120,6 +124,7 @@ class BrandList extends StatelessWidget {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
+
           final brandDocs = snapshot.data!.docs;
           List<BrandModel> brands = [];
 
@@ -127,35 +132,41 @@ class BrandList extends StatelessWidget {
             final brand = BrandModel.fromSnapshot(doc);
             brands.add(brand);
           }
+
+          List<BrandModel> filteredBrands = brands
+              .where((brand) => brand.brand.toLowerCase().contains(searchText))
+              .toList();
+
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: brands.length,
+            itemCount: filteredBrands.length,
             itemBuilder: (context, index) {
-              final brand = brands[index];
+              final brand = filteredBrands[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                     vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Card(
                   elevation: 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        child: Text(brand.brand, style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Text(
+                          brand.brand,
+                          style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic),
                         ),
                       ),
-                      // const Spacer(),
-
-                      // const Spacer(),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Center(
-                        child: Image.network(
-                            brand.image, width: 200, height: 200),
+                        child:
+                        Image.network(brand.image, width: 200, height: 200),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -167,17 +178,23 @@ class BrandList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditBrand(brand: brand,image: brand.image,),));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditBrand(
+                                          brand: brand,
+                                          image: brand.image,
+                                        ),
+                                      ));
                                 },
                                 child: const Text(
                                   'Edit',
-                                  style: TextStyle(fontSize: 12,
-                                      color: Colors.cyan),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.cyan),
                                 ),
                               ),
                             ),
@@ -188,7 +205,6 @@ class BrandList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
@@ -197,13 +213,14 @@ class BrandList extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Confirm Deletion',),
+                                        title: const Text(
+                                          'Confirm Deletion',
+                                        ),
                                         content: const Text(
                                             'Are you sure you want to delete this category?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              // Dismiss the dialog
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text('Cancel'),
@@ -220,9 +237,9 @@ class BrandList extends StatelessWidget {
                                     },
                                   );
                                 },
-                                child: const Text('Delete', style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.red)),
+                                child: const Text('Delete',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red)),
                               ),
                             ),
                           ),

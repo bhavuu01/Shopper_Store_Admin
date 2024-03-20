@@ -28,10 +28,25 @@ class _EditSalesState extends State<EditSales> {
 
   void initState() {
     super.initState();
-    salesController.text = widget.sales.sales;
+    salesController.text = widget.sales.sales.trim();
   }
 
   Future<void> _updateSales() async{
+
+    if (!_validateFields()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     DocumentReference salesref = FirebaseFirestore.instance.collection('Sales').doc(widget.sales.id);
 
     Map<String, dynamic> updatedData = {'sales': salesController.text,};
@@ -54,6 +69,10 @@ class _EditSalesState extends State<EditSales> {
     }
   }
 
+  bool _validateFields() {
+    return salesController.text.isNotEmpty;
+  }
+
   Future<String> uploadImageToStorage(File imageFile) async {
     Reference storageref = FirebaseStorage.instance.ref().child('Sales_image/${widget.sales.id}');
     await storageref.putFile(imageFile);
@@ -66,7 +85,7 @@ class _EditSalesState extends State<EditSales> {
         title: const Text('Edit Sales', style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
-            color: Colors.black
+            // color: Colors.black
           ),
         ),
         backgroundColor: Colors.cyan,
@@ -87,7 +106,7 @@ class _EditSalesState extends State<EditSales> {
                   controller: salesController,
                   decoration: const InputDecoration(
                     labelText: 'Sale Name',
-                    labelStyle: TextStyle(color: Colors.black),
+                    // labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
@@ -119,8 +138,8 @@ class _EditSalesState extends State<EditSales> {
                       return;
                     selectedImage = File(file.path);
                     setState(() {});
-                  },
-                  child: const Text('Select Image',style: TextStyle(color: Colors.black, fontSize: 16),),
+                  },style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
+                  child: const Text('Select Image',style: TextStyle(color: Colors.white, fontSize: 16),),
                 ),
               ),
               const SizedBox(height: 20,),

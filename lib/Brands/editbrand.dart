@@ -30,10 +30,25 @@ class _EditBrandState extends State<EditBrand> {
 
   void initState() {
     super.initState();
-    brandController.text = widget.brand.brand;
+    brandController.text = widget.brand.brand.trim();
   }
 
   Future<void> _updateBrand() async{
+
+    if (!_validateFields()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     DocumentReference brandref = FirebaseFirestore.instance.collection('Brands').doc(widget.brand.id);
     Map<String, dynamic> updatedData = {'brand' : brandController.text
     };
@@ -56,7 +71,9 @@ class _EditBrandState extends State<EditBrand> {
       );
     }
 }
-
+  bool _validateFields() {
+    return brandController.text.isNotEmpty;
+  }
 Future<String> uploadImageToUpload(File imageFile) async{
     Reference storageref = FirebaseStorage.instance.ref().child('Brand_images/${widget.brand.id}');
     await storageref.putFile(imageFile);
@@ -82,7 +99,7 @@ Future<String> uploadImageToUpload(File imageFile) async{
                   controller: brandController,
                   decoration: InputDecoration(
                     labelText: 'Brand Name',
-                    labelStyle: TextStyle(color: Colors.black),
+                    // labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -115,7 +132,9 @@ Future<String> uploadImageToUpload(File imageFile) async{
                   setState(() {
 
                   });
-                }, child: const Text('Select Image', style: TextStyle(color: Colors.black, fontSize: 15),)),
+                }, style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.cyan),
+                child: const Text('Select Image', style: TextStyle(color: Colors.white, fontSize: 15),)),
               ),
               const SizedBox(height: 20,),
 

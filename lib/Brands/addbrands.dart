@@ -117,7 +117,6 @@ class _AddBrandsState extends State<AddBrands> {
                 controller: brand_name,
                 decoration: InputDecoration(
                   labelText: 'Brand Name',
-                  labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)
                   ),
@@ -203,7 +202,6 @@ class CategoryDropdown extends StatelessWidget {
         onChanged: onChanged,
         decoration: const InputDecoration(
           labelText: 'Select Category',
-          labelStyle: TextStyle(color: Colors.black),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
@@ -215,7 +213,7 @@ class CategoryDropdown extends StatelessWidget {
           items: categories.map((CategoryModel category){
             return DropdownMenuItem<String>(
               value: category.category,
-              child: Text(category.category, style: TextStyle(color: Colors.black),
+              child: Text(category.category, style: TextStyle(color: Colors.cyan),
               ),
             );
           }).toList(),

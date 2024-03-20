@@ -99,7 +99,6 @@ class _AddCategoryState extends State<AddCategory> {
                 controller: category_name,
                 decoration: InputDecoration(
                   labelText: 'Category Name',
-                  labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10)
                   ),

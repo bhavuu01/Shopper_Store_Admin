@@ -1,17 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopperstore/Auth/forgotpassword.dart';
-import 'package:shopperstore/Auth/login.dart';
-import 'package:shopperstore/Auth/signup.dart';
-import 'package:shopperstore/Category/addcategory.dart';
-import 'package:shopperstore/Category/categorymodel.dart';
-import 'package:shopperstore/homescreen.dart';
+import 'package:provider/provider.dart';
 import 'package:shopperstore/splash.dart';
+
+import 'Provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,11 +23,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ShopperStore',
       theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: Provider.of<ThemeProvider>(context).currentTheme,
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
-
+      home: const SplashScreen(),
     );
   }
 }

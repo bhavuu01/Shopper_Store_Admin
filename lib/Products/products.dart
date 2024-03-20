@@ -1,13 +1,8 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shopperstore/Products/EditProduct.dart';
 import 'package:shopperstore/Products/ProductModel.dart';
-import '../Brands/BrandModel.dart';
-import '../Category/categorymodel.dart';
 import 'AddProduct.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -18,9 +13,11 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  String _searchText = '';
 
   void _deleteProduct(String productID) {
-    FirebaseFirestore.instance.collection('Products')
+    FirebaseFirestore.instance
+        .collection('Products')
         .doc(productID)
         .delete()
         .then((value) {
@@ -42,12 +39,14 @@ class _ProductScreenState extends State<ProductScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Products', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+        title: const Text(
+          'Products',
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.cyan,
         centerTitle: true,
       ),
@@ -66,8 +65,9 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
+                        _searchText = value.toLowerCase();
                       });
                     },
                     decoration: const InputDecoration(
@@ -79,19 +79,27 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10,),
-
-              ProductList(deleteProduct: _deleteProduct),
+              const SizedBox(
+                height: 10,
+              ),
+              ProductList(deleteProduct: _deleteProduct, searchText: _searchText),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductsScreen()));
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AddProductScreen()));
         },
-        child: const Icon(Icons.add, color: Colors.black, size: 25.0,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+          size: 25.0,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -99,11 +107,14 @@ class _ProductScreenState extends State<ProductScreen> {
 }
 
 class ProductList extends StatelessWidget {
-
   final Function(String) deleteProduct;
-  const ProductList({Key? key,
+  final String searchText;
+
+  const ProductList({
+    Key? key,
     required this.deleteProduct,
-  }) : super (key: key);
+    required this.searchText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,33 +131,40 @@ class ProductList extends StatelessWidget {
             final product = ProductModel.fromSnapshot(doc);
             products.add(product);
           }
+
+          List<ProductModel> filteredProducts = products
+              .where((product) =>
+              product.productName.toLowerCase().contains(searchText))
+              .toList();
+
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
+            itemCount: filteredProducts.length,
             itemBuilder: (context, index) {
-              final product = products[index];
+              final product = filteredProducts[index];
               String imageUrl =
               product.images!.isNotEmpty ? product.images![0] : '';
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Card(
                   elevation: 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child:  Text(product.productName, style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        child: Text(
+                          product.productName,
+                          style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic),
                         ),
                       ),
                       Center(
-                        child: Image.network(
-                            imageUrl, width: 200, height: 200),
+                        child: Image.network(imageUrl, width: 200, height: 200),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -158,22 +176,26 @@ class ProductList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProduct(
-                                      product: product,
-                                      images: product.images != null && product.images!.isNotEmpty ? product.images![0] : '',
-                                     )
-                                    ),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditProduct(
+                                          product: product,
+                                          images: product.images != null &&
+                                              product.images!.isNotEmpty
+                                              ? product.images![0]
+                                              : '',
+                                        )),
                                   );
                                 },
                                 child: const Text(
                                   'Edit',
-                                  style: TextStyle(fontSize: 12,
-                                      color: Colors.cyan),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.cyan),
                                 ),
                               ),
                             ),
@@ -184,7 +206,6 @@ class ProductList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
@@ -193,13 +214,14 @@ class ProductList extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Confirm Deletion',),
+                                        title: const Text(
+                                          'Confirm Deletion',
+                                        ),
                                         content: const Text(
                                             'Are you sure you want to delete this category?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              // Dismiss the dialog
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text('Cancel'),
@@ -216,9 +238,9 @@ class ProductList extends StatelessWidget {
                                     },
                                   );
                                 },
-                                child: const Text('Delete', style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.red)),
+                                child: const Text('Delete',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red)),
                               ),
                             ),
                           ),
@@ -233,5 +255,3 @@ class ProductList extends StatelessWidget {
         });
   }
 }
-
-

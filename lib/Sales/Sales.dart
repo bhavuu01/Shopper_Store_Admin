@@ -42,7 +42,7 @@ class _SalesScreenState extends State<SalesScreen> {
         title: const Text('Sales',style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
-            color: Colors.black
+            // color: Colors.black
          ),
         ),
         backgroundColor: Colors.cyan,

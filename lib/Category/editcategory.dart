@@ -26,10 +26,25 @@ class _EditCategoryState extends State<EditCategory> {
 
   void initState() {
     super.initState();
-    categoryController.text = widget.category.category;
+    categoryController.text = widget.category.category.trim();
   }
 
   Future<void> _updateCategory() async{
+
+    if (!_validateFields()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     DocumentReference categoryref = FirebaseFirestore.instance.collection('Categories').doc(widget.category.id);
 
     Map<String, dynamic> updatedData = {'category': categoryController.text,
@@ -53,6 +68,10 @@ class _EditCategoryState extends State<EditCategory> {
      );
     }
  }
+
+  bool _validateFields() {
+    return categoryController.text.isNotEmpty;
+  }
 
  Future<String> uploadImageToStorage(File imageFile) async{
     Reference storageref = FirebaseStorage.instance.ref().child('Categories_image/${widget.category.id}');
@@ -86,7 +105,7 @@ class _EditCategoryState extends State<EditCategory> {
                  controller: categoryController,
                  decoration: const InputDecoration(
                    labelText: 'Category Name',
-                   labelStyle: TextStyle(color: Colors.black),
+                   // labelStyle: TextStyle(color: Colors.black),
                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))
                    ),
                    focusedBorder: OutlineInputBorder(
@@ -117,8 +136,9 @@ class _EditCategoryState extends State<EditCategory> {
                      return;
                    selectedImage = File(file.path);
                    setState(() {});
-                 },
-                 child: const Text('Select Image',style: TextStyle(color: Colors.black, fontSize: 16),),
+                 },style: ElevatedButton.styleFrom(
+                 backgroundColor: Colors.cyan),
+                 child: const Text('Select Image',style: TextStyle(color: Colors.white, fontSize: 16),),
                ),
              ),
              const SizedBox(height: 20,),

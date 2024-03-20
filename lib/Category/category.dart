@@ -13,8 +13,14 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  String _searchText = '';
+
   void _deleteCategory(String categoryID) {
-    FirebaseFirestore.instance.collection('Categories').doc(categoryID).delete().then((value) {
+    FirebaseFirestore.instance
+        .collection('Categories')
+        .doc(categoryID)
+        .delete()
+        .then((value) {
       Fluttertoast.showToast(
         msg: 'Category Deleted Successfully',
         toastLength: Toast.LENGTH_SHORT,
@@ -39,18 +45,22 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         title: const Text(
           'Categories',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.cyan,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.cyan.withOpacity(.1),
@@ -61,7 +71,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
                     onChanged: (value) {
-                      setState(() {});
+                      setState(() {
+                        _searchText = value.toLowerCase();
+                      });
                     },
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -72,9 +84,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 ),
               ),
-             const SizedBox(height: 10,),
-
-              CategoryList(deleteCategory: _deleteCategory),
+              const SizedBox(
+                height: 10,
+              ),
+              CategoryList(
+                deleteCategory: _deleteCategory,
+                searchText: _searchText,
+              ),
             ],
           ),
         ),
@@ -82,7 +98,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddCategory(),));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const AddCategory(),
+          ));
         },
         child: const Icon(Icons.add, color: Colors.black, size: 25.0),
       ),
@@ -91,11 +109,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 }
 
-
 class CategoryList extends StatelessWidget {
-
   final Function(String) deleteCategory;
-  const CategoryList({Key? key, required this.deleteCategory,}) : super (key: key);
+  final String searchText;
+  const CategoryList({
+    Key? key,
+    required this.deleteCategory,
+    required this.searchText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -112,36 +133,41 @@ class CategoryList extends StatelessWidget {
             final category = CategoryModel.fromSnapshot(doc);
             categories.add(category);
           }
+
+          List<CategoryModel> filteredCategories = categories.where((category) {
+            return category.category.toLowerCase().contains(searchText);
+          }).toList();
+
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: categories.length,
+            itemCount: filteredCategories.length,
             itemBuilder: (context, index) {
-              final category = categories[index];
+              final category = filteredCategories[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Card(
                   elevation: 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        child: Text(category.category, style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic
-                         ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Text(
+                          category.category,
+                          style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic),
                         ),
                       ),
-                      // const Spacer(),
-
-                      // const Spacer(),
-                     const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Center(
-                        child: Image.network(
-                            category.image, width: 300, height: 200),
+                        child: Image.network(category.image,
+                            width: 300, height: 200),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -153,17 +179,23 @@ class CategoryList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditCategory(category: category,image: category.image,),));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditCategory(
+                                          category: category,
+                                          image: category.image,
+                                        ),
+                                      ));
                                 },
                                 child: const Text(
                                   'Edit',
-                                  style: TextStyle(fontSize: 12,
-                                      color: Colors.cyan),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.cyan),
                                 ),
                               ),
                             ),
@@ -174,7 +206,6 @@ class CategoryList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
@@ -183,13 +214,14 @@ class CategoryList extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Confirm Deletion',),
+                                        title: const Text(
+                                          'Confirm Deletion',
+                                        ),
                                         content: const Text(
                                             'Are you sure you want to delete this category?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              // Dismiss the dialog
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text('Cancel'),
@@ -206,9 +238,9 @@ class CategoryList extends StatelessWidget {
                                     },
                                   );
                                 },
-                                child: const Text('Delete', style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.red)),
+                                child: const Text('Delete',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red)),
                               ),
                             ),
                           ),

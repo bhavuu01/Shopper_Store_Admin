@@ -88,7 +88,7 @@ class _AddSalesState extends State<AddSales> {
         title: const Text('Add Sales', style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
-            color: Colors.black
+            // color: Colors.black
          ),
         ),
         backgroundColor: Colors.cyan,
@@ -105,7 +105,7 @@ class _AddSalesState extends State<AddSales> {
                 controller: sales_name,
                 decoration: InputDecoration(
                   labelText: 'Sale',
-                  labelStyle: const TextStyle(color: Colors.black),
+                  // labelStyle: const TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -143,9 +143,10 @@ class _AddSalesState extends State<AddSales> {
                 width: double.infinity,
                 child: ElevatedButton(onPressed: (){
                   addSalesToFirestore();
-                }, child: isLoading
+                },style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan[300]),
+                  child: isLoading
                   ? const CircularProgressIndicator()
-                  : const Text('Add Sale',style: TextStyle(color: Colors.black,fontSize: 20),),
+                  : const Text('Add Sale',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
               )
             ],
