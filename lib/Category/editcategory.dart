@@ -82,6 +82,7 @@ class _EditCategoryState extends State<EditCategory> {
  Widget build(BuildContext context) {
    return Scaffold(
      appBar: AppBar(
+       iconTheme: const IconThemeData(color: Colors.white),
        title: const Text('Edit Category', style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,color:

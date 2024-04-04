@@ -39,10 +39,11 @@ class _SalesScreenState extends State<SalesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text('Sales',style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
-            // color: Colors.black
+            color: Colors.white
          ),
         ),
         backgroundColor: Colors.cyan,

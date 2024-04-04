@@ -85,9 +85,11 @@ class _AddSalesState extends State<AddSales> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text('Add Sales', style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
+            color: Colors.white
             // color: Colors.black
          ),
         ),
@@ -119,7 +121,7 @@ class _AddSalesState extends State<AddSales> {
 
               selectedImage != null
                   ? Image.file(selectedImage!, height: 200,width: 200,)
-                  : Image.asset("asset/images/nopicture.png",height: 200,width: 200,),
+                  : Image.asset("asset/images/nophoto.png",height: 200,width: 200,),
 
               const SizedBox(height: 20,),
 

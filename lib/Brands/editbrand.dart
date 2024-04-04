@@ -83,6 +83,7 @@ Future<String> uploadImageToUpload(File imageFile) async{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text('Edit Brand', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25,color: Colors.white),),
         backgroundColor: Colors.cyan,
         elevation: 20,

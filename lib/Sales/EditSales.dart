@@ -82,9 +82,11 @@ class _EditSalesState extends State<EditSales> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text('Edit Sales', style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
+            color: Colors.white
             // color: Colors.black
           ),
         ),

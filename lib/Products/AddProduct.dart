@@ -142,13 +142,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
             'productTitle2': productTitle2,
             'productTitle3': productTitle3,
             'productTitle4': productTitle4,
-            'productDetail1': productDetail1,
-            'productDetail2': productDetail2,
-            'productDetail3': productDetail3,
-            'productDetail4': productDetail4,
-            'ProductDiscount': productDiscount,
+            'productTitleDetail1': productDetail1,
+            'productTitleDetail2': productDetail2,
+            'productTitleDetail3': productDetail3,
+            'productTitleDetail4': productDetail4,
+            'discount': productDiscount,
             'productNewPrice': productNewPrice,
-            'allDetails': allProduct,
+            'itemdetails': allProduct,
             'images': imageUrls,
           }).then((value){
             selectedImage.clear();
@@ -199,12 +199,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Products",style: TextStyle(fontWeight: FontWeight.bold),),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.cyan,
+        title: const Text("Add Products",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
           child: Column(
             children: [
 
@@ -226,10 +228,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     );
                   },
                 )
-                    : Image.asset("asset/images/nopicture.png",
+                    : Image.asset("asset/images/nophoto.png",
                   width: 300,
                   height: 300,
-                  fit: BoxFit.cover,
+                  // fit: BoxFit.cover,
                 ),
               ),
 
@@ -242,8 +244,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                       selectedImage = files.map((file) => File(file.path)).toList();
                       setState(() {});
-                    },style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-                    child: const Text("Select Image",style: TextStyle(color: Colors.white),)),
+                    },style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+                    child: const Text("Select Images",style: TextStyle(color: Colors.white),)),
               ),
 
               const SizedBox(height: 20,),
@@ -273,12 +275,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productNameController,
                 decoration: InputDecoration(
+                  labelText: 'Product Name',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Name",
 
@@ -292,12 +296,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 controller: productPriceController,
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
+                  labelText: 'Product Price',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Price",
 
@@ -310,12 +316,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: discountController,
                 decoration: InputDecoration(
+                  labelText: 'Discount',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Discount",
 
@@ -328,12 +336,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productNewPriceController,
                 decoration: InputDecoration(
+                  labelText: 'New Price',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product New Price",
 
@@ -346,12 +356,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productColorController,
                 decoration: InputDecoration(
+                  labelText: 'Color',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Color",
 
@@ -364,12 +376,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productTitle1Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Title 1',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Title 1",
 
@@ -381,12 +395,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 textInputAction: TextInputAction.next,
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 decoration: InputDecoration(
+                  labelText: 'Product Detail 1',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Detail1",
 
@@ -398,12 +414,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productTitle2Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Title 2',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Title 2",
 
@@ -415,12 +433,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productDetail2Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Detail 2',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Detail2",
 
@@ -433,12 +453,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productTitle3Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Title 3',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Title 3",
 
@@ -451,12 +473,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productDetail3Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Detail 3',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Detail3",
 
@@ -469,12 +493,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
               onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productTitle4Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Title 4',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Title 4",
 
@@ -487,12 +513,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: productDetail4Controller,
                 decoration: InputDecoration(
+                  labelText: 'Product Detail 4',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Detail4",
 
@@ -509,12 +537,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 // controller: productDescriptionController,
                 maxLines: 3, // Adjust the number of lines according to your design
                 decoration: InputDecoration(
+                  labelText: 'Description',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.cyan),
                   ),
                   hintText: "Product Description",
                 ),
@@ -528,12 +558,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 controller: productAllDetailsController,
                 maxLines: 5,
                 decoration: InputDecoration(
+                  labelText: 'All Details',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "All Detail",
 
@@ -546,10 +578,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
               Container(width: double.infinity,
                 child: ElevatedButton(onPressed: (){
                   addProductsToFireStore();
-                },style: ElevatedButton.styleFrom(backgroundColor: Colors.green,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+                },style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
                     child:  isLoading
                         ? const CircularProgressIndicator(color: Colors.white,)
-                        :const Text("Add Product",style: TextStyle(color: Colors.white),
+                        :const Text("Add Product",style: TextStyle(color: Colors.white,fontSize: 18),
 
                     )),
               )],
@@ -607,7 +639,7 @@ class BrandDropDown extends StatelessWidget {
                 value: brand.brand,
                 child: Text(
                   brand.brand,
-                  style: const TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.cyan),
                 ),
               );
             }).toList(),

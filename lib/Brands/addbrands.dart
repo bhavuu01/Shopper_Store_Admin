@@ -90,6 +90,7 @@ class _AddBrandsState extends State<AddBrands> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text('Add Brand',style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
         backgroundColor: Colors.cyan,
         centerTitle: true,
@@ -129,7 +130,7 @@ class _AddBrandsState extends State<AddBrands> {
               const SizedBox(height: 20,),
               selectedImage != null
                   ? Image.file(selectedImage!,height: 200,width: 200,)
-                  : Image.asset("asset/images/picture.png",height: 200,width: 200,),
+                  : Image.asset("asset/images/nophoto.png",height: 200,width: 200,),
 
 
 
