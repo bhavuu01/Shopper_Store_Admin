@@ -25,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return (await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Are you sure?'),
-        content: const Text('Do you want to exit the app?'),
+        title: const Text('Exit Shopper Store?',style: TextStyle(fontWeight: FontWeight.bold),),
+        content: const Text('Are you sure you want to exit the app?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
