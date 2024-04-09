@@ -48,11 +48,11 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.cyan,
         title: Text('All Orders',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-          color: Colors.white
-        ),
+          style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          ),
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -134,33 +134,34 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
                       SizedBox(height: 16),
                       Divider(color: Colors.grey),
                       SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          DropdownButton<String>(
-                            onChanged: (String? newValue) {
-                              if (newValue != null) {
-                                _updateOrderStatus(orderId, newValue);
-                              }
-                            },
-                            value: status,
-                            items: <String>[
-                              'Pending',
-                              'Ordered Confirmed',
-                              'Shipped',
-                              'Out For Delivery',
-                              'Delivered',
-                              'Cancelled'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                          // Additional buttons or widgets can be added here
-                        ],
-                      ),
+                      if (status != 'Cancelled') // Conditionally rendering dropdown
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            DropdownButton<String>(
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  _updateOrderStatus(orderId, newValue);
+                                }
+                              },
+                              value: status,
+                              items: <String>[
+                                'Pending',
+                                'Ordered Confirmed',
+                                'Shipped',
+                                'Out For Delivery',
+                                'Delivered',
+                                'Cancelled'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                            // Additional buttons or widgets can be added here
+                          ],
+                        ),
                     ],
                   ),
                 ),

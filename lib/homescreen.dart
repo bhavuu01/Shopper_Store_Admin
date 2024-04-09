@@ -25,7 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return (await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Exit Shopper Store?',style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text(
+          'Exit Shopper Store?',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         content: const Text('Are you sure you want to exit the app?'),
         actions: [
           TextButton(
@@ -137,23 +140,31 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Image.asset(
-                "asset/images/mobileshopping.png",
-                height: 100,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                child: GridView.count(
+        body: SingleChildScrollView(
+          // physics: BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 60,
+                  child: ClipOval(
+                    child: Image.asset(
+                      "asset/images/mobileshopping.png",
+                      height: 120,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GridView.count(
                   crossAxisCount: 2,
                   childAspectRatio: 1.0,
                   mainAxisSpacing: 20.0,
                   crossAxisSpacing: 20.0,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   children: List.generate(6, (index) {
                     List<Map<String, dynamic>> cardData = [
                       {
@@ -211,9 +222,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   }),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

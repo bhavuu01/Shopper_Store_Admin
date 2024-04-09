@@ -20,7 +20,17 @@ class _UsersScreenState extends State<UsersScreen> {
   Future<void> _fetchUsers() async {
     final usersCollection = FirebaseFirestore.instance.collection('User');
     _usersFuture = usersCollection.get();
+    setState(() {});
   }
+
+
+  Future<void> _deleteUser(String userId) async {
+    final userDoc =
+    FirebaseFirestore.instance.collection('User').doc(userId);
+    await userDoc.delete();
+    await _fetchUsers();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +53,7 @@ class _UsersScreenState extends State<UsersScreen> {
             itemCount: users.length,
             itemBuilder: (context, index) {
               final userData = users[index].data();
+              final userId = users[index].id;
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
@@ -56,6 +67,35 @@ class _UsersScreenState extends State<UsersScreen> {
                       SizedBox(height: 4),
                       Text('UserId: ${userData['UID']}'),
                     ],
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Confirm"),
+                            content: Text("Are you sure you want to delete this user?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  _deleteUser(userId);
+                                },
+                                child: Text("Delete"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               );

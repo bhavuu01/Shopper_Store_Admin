@@ -196,6 +196,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ScaffoldMessenger.of(context).showSnackBar
                               (const SnackBar(
                                 content: Text("Register Successfully")));
+                            name.clear();
+                            email.clear();
+                            pass.clear();
+                            cpass.clear();
                           }
                           on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
