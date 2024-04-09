@@ -150,6 +150,7 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
                               'Shipped',
                               'Out For Delivery',
                               'Delivered',
+                              'Cancelled'
                             ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,

@@ -116,17 +116,36 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => const HomeScreen()),
+                              MaterialPageRoute(builder: (context) => HomeScreen()),
                             );
+                            setState(() {
+                              emailController.clear();
+                              passwordController.clear();
+                            });
                           } on FirebaseAuthException catch (e) {
+                            print("Firebase Auth Exception: ${e.code}");
                             if (e.code == "user-not-found" || e.code == "wrong-password") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Invalid email or password"),
+                                  content: Text("Invalid Email or Password"),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Invalid Email or Password"),
                                 ),
                               );
                             }
+                          } catch (e) {
+                            print("Error: $e");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Invalid Email or Password"),
+                              ),
+                            );
                           }
+
                         }
                       },
                       style: ElevatedButton.styleFrom(
