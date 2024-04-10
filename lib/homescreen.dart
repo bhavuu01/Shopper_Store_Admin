@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
           title: const Text(
-            'ShopperStore',
+            'Shopper Store',
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
