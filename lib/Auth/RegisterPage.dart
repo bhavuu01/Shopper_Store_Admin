@@ -11,60 +11,61 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
-
-  final Form_key = GlobalKey<FormState>();
-  var password = false, con_password = true;
-  bool passwordVisible = false;
-  bool con_passwordVisible = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
   TextEditingController cpass = TextEditingController();
-  bool isLoading = false;
-  String uniquefilename = DateTime.now().millisecondsSinceEpoch.toString();
+  bool _passVisible = false; // Separate boolean for pass visibility
+  bool _cpassVisible = false; // Separate boolean for cpass visibility
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
-          key: Form_key,
+          key: _formKey,
           child: Container(
-            margin: EdgeInsets.only(top: 100,left: 20,right: 20),
+            margin: EdgeInsets.only(top: 100, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Welcome to ShopperStore',
-                  style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic),
+                Text(
+                  'Welcome to ShopperStore',
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
                 ),
-                Text("Let's Register into ShopperStore",style: TextStyle(fontSize: 15,color: Colors.grey),),
+                Text(
+                  "Let's Register into ShopperStore",
+                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
                   child: TextFormField(
                     controller: name,
-                    validator: (value){
-                      if (value == null || value.isEmpty){
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
                         return "Please enter your name";
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                       hintText: "Enter your username",
-                      label: Text("Username"),
+                      labelText: "Username",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.black)
-                      ),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(color: Colors.black)),
                       prefixIcon: Icon(Icons.account_box_rounded),
                     ),
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 30),
                   child: TextFormField(
                     controller: email,
                     validator: (value) {
@@ -76,48 +77,45 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                     decoration: InputDecoration(
-                        hintText: "Enter your email",
-                        label: const Text("Email"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            borderSide: BorderSide(color: Colors.black)
-                        ),
-                        prefixIcon: const Icon(Icons.email_outlined)),
+                      hintText: "Enter your email",
+                      labelText: "Email",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(color: Colors.black)),
+                      prefixIcon: Icon(Icons.email_outlined),
+                    ),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
                   child: TextFormField(
                     controller: pass,
-                    validator: (value){
-                      if(value == null || value.isEmpty){
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
                         return "Please enter Password";
                       }
                       return null;
                     },
-                    obscureText: !passwordVisible,
+                    obscureText: !_passVisible,
                     decoration: InputDecoration(
                       hintText: "Enter your Password",
-                      label: Text("Password"),
+                      labelText: "Password",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(color: Colors.black)
-                      ),
+                          borderSide: BorderSide(color: Colors.black)),
                       prefixIcon: Icon(Icons.lock_outline_rounded),
                       suffixIcon: IconButton(
-                        onPressed: (){
+                        onPressed: () {
                           setState(() {
-                            passwordVisible = !passwordVisible;
+                            _passVisible = !_passVisible;
                           });
                         },
                         icon: Icon(
-                          passwordVisible
+                          _passVisible
                               ? Icons.visibility
                               : Icons.visibility_off,
                         ),
@@ -126,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 30),
                   child: TextFormField(
                     controller: cpass,
                     validator: (value) {
@@ -135,35 +133,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                       return null;
                     },
-                    obscureText: !con_passwordVisible,
+                    obscureText: !_cpassVisible,
                     decoration: InputDecoration(
                       hintText: "Please confirm your password",
-                      label: const Text("Confirm Password"),
+                      labelText: "Confirm Password",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(color: Colors.black)
-                      ),
-                      prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          borderSide: BorderSide(color: Colors.black)),
+                      prefixIcon: Icon(Icons.lock_outline_rounded),
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
-                            if(con_password == true)
-                            {
-                              con_password = false;
-                            }
-                            else
-                            {
-                              con_password= true;
-                            }
-
-                            con_passwordVisible = !con_passwordVisible;
+                            _cpassVisible = !_cpassVisible;
                           });
                         },
                         icon: Icon(
-                          con_passwordVisible
+                          _cpassVisible
                               ? Icons.visibility
                               : Icons.visibility_off,
                         ),
@@ -173,60 +160,71 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 Container(
                   alignment: Alignment.bottomRight,
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   child: SizedBox(
                     height: 60,
                     width: 60,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (Form_key.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
+                          // Check if passwords match
+                          if (pass.text != cpass.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Passwords do not match"),
+                              ),
+                            );
+                            return;
+                          }
                           try {
+                            setState(() {
+                              _isLoading = true;
+                            });
                             await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
-                              email: email.text, password: pass.text,)
-                                .then((value) {
-                              FirebaseFirestore.instance.collection(
-                                  "Admin").add(
-                                  {
-                                    "Username": name.text,
-                                    "Email": email.text,
-                                    "Password": pass.text,
-                                  });
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar
-                              (const SnackBar(
-                                content: Text("Register Successfully")));
+                              email: email.text,
+                              password: pass.text,
+                            );
+                            await FirebaseFirestore.instance
+                                .collection("Admin")
+                                .add(
+                              {
+                                "Username": name.text,
+                                "Email": email.text,
+                                "Password": pass.text,
+                              },
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Registered Successfully"),
+                              ),
+                            );
                             name.clear();
                             email.clear();
                             pass.clear();
                             cpass.clear();
-                          }
-                          on FirebaseAuthException catch (e) {
-                            if (e.code == 'weak-password') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Password is too weak"),
-                                  ));
-                            }
-                            else if (e.code == 'email-already-in-use') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        "Email is already Registered"),
-                                  ));
-                            }
+                          } on FirebaseAuthException catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e.message!),
+                              ),
+                            );
+                          } finally {
+                            setState(() {
+                              _isLoading = false;
+                            });
                           }
                         }
-                        // Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.cyan[600],
-                        side: const BorderSide(color: Colors.black),
+                        side: BorderSide(color: Colors.black),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(70),
                         ),
                       ),
-                      child: const Icon(Icons.arrow_forward_rounded, color: Colors.black),
+                      child: Icon(Icons.arrow_forward_rounded,
+                          color: Colors.black),
                     ),
                   ),
                 ),
@@ -234,10 +232,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Already have an Account ?"),
-                    SizedBox(width: 10,),
-                    TextButton(onPressed: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
-                    }, child: Text("Login",style: TextStyle(color: Colors.green),))
+                    SizedBox(width: 10),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Login",
+                          style: TextStyle(color: Colors.green),
+                        ))
                   ],
                 )
               ],

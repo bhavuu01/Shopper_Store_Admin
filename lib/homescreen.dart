@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           centerTitle: true,
         ),
         drawer: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.55,
           child: Drawer(
             child: ListView(
               children: <Widget>[
