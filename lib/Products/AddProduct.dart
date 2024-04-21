@@ -31,6 +31,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController discountController = TextEditingController();
   TextEditingController productNewPriceController = TextEditingController();
   TextEditingController productColorController = TextEditingController();
+  // TextEditingController deliveryController = TextEditingController();
   TextEditingController productTitle1Controller = TextEditingController();
   TextEditingController productDetail1Controller = TextEditingController();
   TextEditingController productTitle2Controller = TextEditingController();
@@ -60,6 +61,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final productPrice = productPriceController.text.trim();
     final productDiscount = discountController.text.trim();
     final productNewPrice = productNewPriceController.text.trim();
+    // final delivery = deliveryController.text.trim();
     final color = productColorController.text.trim();
     final productTitle1 = productTitle1Controller.text.trim();
     final productTitle2 = productTitle2Controller.text.trim();
@@ -87,6 +89,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         productPrice.isEmpty ||
         productDiscount.isEmpty ||
         productNewPrice.isEmpty ||
+        // delivery.isEmpty ||
         color.isEmpty ||
         productTitle1.isEmpty ||
         productTitle2.isEmpty ||
@@ -136,6 +139,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             'brand': subcategory,
             'productName': productName,
             'productPrice': productPrice,
+            // 'Delivery': delivery,
             'productColor': color,
             'productDescription': description,
             'productTitle1': productTitle1,
@@ -160,6 +164,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             productPriceController.clear();
             discountController.clear();
             productNewPriceController.clear();
+            // deliveryController.clear();
             productColorController.clear();
             productTitle1Controller.clear();
             productTitle2Controller.clear();
@@ -351,6 +356,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
               ),
               const SizedBox(height: 20,),
+              // TextFormField(
+              //   textInputAction: TextInputAction.next,
+              //   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              //   controller: deliveryController,
+              //   decoration: InputDecoration(
+              //     labelText: 'Delivery',
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //       borderSide: const BorderSide(color: Colors.black),
+              //     ),
+              //     focusedBorder: const OutlineInputBorder(
+              //         borderRadius: BorderRadius.all(Radius.circular(10)),
+              //         borderSide: BorderSide(color: Colors.cyan)
+              //     ),
+              //     hintText: "Delivery",
+              //   ),
+              // ),
+              // const SizedBox(height: 20,),
               TextFormField(
                 textInputAction: TextInputAction.next,
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
@@ -366,8 +389,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       borderSide: BorderSide(color: Colors.cyan)
                   ),
                   hintText: "Product Color",
-
-
                 ),
               ),
               const SizedBox(height: 20,),

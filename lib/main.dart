@@ -5,9 +5,9 @@ import 'package:shopperstore/splash.dart';
 
 import 'Provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp(); // Make sure to await the initialization
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
@@ -17,18 +17,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ShopperStore',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: Provider.of<ThemeProvider>(context).currentTheme,
+      title: 'Shopper Store',
+      theme: Provider.of<ThemeProvider>(context).currentTheme, // Use the theme from the provider
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }

@@ -23,7 +23,6 @@ class _UsersScreenState extends State<UsersScreen> {
     setState(() {});
   }
 
-
   Future<void> _deleteUser(String userId) async {
     final userDoc =
     FirebaseFirestore.instance.collection('User').doc(userId);
@@ -31,12 +30,20 @@ class _UsersScreenState extends State<UsersScreen> {
     await _fetchUsers();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Users'),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.cyan,
+        title: Text('Users',
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+          color: Colors.white,
+          fontSize: 25
+          ),
+        ),
+        centerTitle: true,
       ),
       body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
         future: _usersFuture,
@@ -49,34 +56,40 @@ class _UsersScreenState extends State<UsersScreen> {
           }
           final users = snapshot.data!.docs;
 
-          return ListView.builder(
+          return ListView.separated(
             itemCount: users.length,
+            separatorBuilder: (context, index) => Divider(),
             itemBuilder: (context, index) {
               final userData = users[index].data();
               final userId = users[index].id;
               return Card(
+                elevation: 4,
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: ListTile(
-                  title: Text('Name: ${userData['Name']}'),
+                  title: Text('Name: ${userData['Name']}',style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Email: ${userData['Email']}'),
+                      Text('Email: ${userData['Email']}',style: TextStyle(fontWeight: FontWeight.bold),),
                       SizedBox(height: 4),
-                      Text('Mobile: ${userData['Mobile']}'),
+                      Text('Mobile: ${userData['Mobile']}',style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 4),
-                      Text('UserId: ${userData['UID']}'),
+                      Text('UserId: ${userData['UID']}',style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text("Confirm"),
-                            content: Text("Are you sure you want to delete this user?"),
+                            content: Text(
+                                "Are you sure you want to delete this user?"),
                             actions: [
                               TextButton(
                                 onPressed: () {

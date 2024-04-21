@@ -29,6 +29,7 @@ class _EditProductState extends State<EditProduct> {
   TextEditingController subCategoryController = TextEditingController();
   final TextEditingController productNameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
+  // final TextEditingController deliveryController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController title1Controller = TextEditingController();
   final TextEditingController product1Controller = TextEditingController();
@@ -52,6 +53,7 @@ class _EditProductState extends State<EditProduct> {
     selectedBrand = widget.product.brand.toString().trim();
     productNameController.text = widget.product.productName.toString().trim();
     priceController.text = widget.product.productPrice.toString().trim();
+    // deliveryController.text = widget.product.delivery.toString().trim();
     colorController.text = widget.product.color.toString().trim();
     title1Controller.text = widget.product.title1.toString();
     product1Controller.text = widget.product.product1.toString().trim();
@@ -103,15 +105,16 @@ class _EditProductState extends State<EditProduct> {
       'price': priceController.text.trim(),
       'discount': discountController.text.trim(),
       'productNewPrice': newpriceController.text.trim(),
+      // 'Delivery': deliveryController.text.trim(),
       'productColor': colorController.text.trim(),
-      'productTitleDetail1': title1Controller.text.trim(),
-      'productTitleDetail2': title2Controller.text.trim(),
-      'productTitleDetail3': title3Controller.text.trim(),
-      'productTitleDetail4': title4Controller.text.trim(),
-      'productTitle1': product1Controller.text.trim(),
-      'productTitle2': product2Controller.text.trim(),
-      'productTitle3': product3Controller.text.trim(),
-      'productTitle4': product4Controller.text.trim(),
+      'productTitleDetail1': product1Controller.text.trim(),
+      'productTitleDetail2': product2Controller.text.trim(),
+      'productTitleDetail3': product3Controller.text.trim(),
+      'productTitleDetail4': product4Controller.text.trim(),
+      'productTitle1': title1Controller.text.trim(),
+      'productTitle2': title2Controller.text.trim(),
+      'productTitle3': title3Controller.text.trim(),
+      'productTitle4': title4Controller.text.trim(),
       'productDescription': descriptionController.text.trim(),
       'itemdetails': productAllDetailsController.text.trim(),
       if (imageUrls.isNotEmpty) 'images': imageUrls,
@@ -143,6 +146,7 @@ class _EditProductState extends State<EditProduct> {
         priceController.text.isNotEmpty &&
         discountController.text.isNotEmpty &&
         newpriceController.text.isNotEmpty &&
+        // deliveryController.text.isNotEmpty &&
         colorController.text.isNotEmpty &&
         product1Controller.text.isNotEmpty &&
         title1Controller.text.isNotEmpty &&
@@ -309,6 +313,23 @@ class _EditProductState extends State<EditProduct> {
               const SizedBox(
                 height: 20,
               ),
+              // TextFormField(
+              //   controller: deliveryController,
+              //   decoration: InputDecoration(
+              //     labelText: 'Edit Delivery',
+              //     // labelStyle: const TextStyle(color: Colors.black),
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(20.0),
+              //     ),
+              //     focusedBorder: const OutlineInputBorder(
+              //       borderRadius: BorderRadius.all(Radius.circular(10)),
+              //       borderSide: BorderSide(color: Colors.cyan),
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
 
               TextFormField(
                 controller: colorController,

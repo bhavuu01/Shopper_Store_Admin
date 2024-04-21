@@ -22,6 +22,7 @@ class ProductModel {
   final String discount;
   final String newPrice;
   final String itemdetails;
+  // final String delivery;
   // final String imageUrls;
 
 
@@ -45,6 +46,7 @@ class ProductModel {
     required this.discount,
     required this.newPrice,
     required this.itemdetails,
+    // required this.delivery,
     // required this.imageUrls
 
 
@@ -72,6 +74,7 @@ class ProductModel {
         discount: data['discount']?? '',
         newPrice: data['productNewPrice']?? '',
         itemdetails: data['itemdetails']?? '',
+        // delivery: data['Delivery']?? '',
         // imageUrls: data['images']?? '',
 
 

@@ -21,29 +21,39 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
+  void _openDrawer() {
+    _scaffoldkey.currentState?.openDrawer();
+  }
+
   Future<bool> _onWillPop() async {
-    return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Exit Shopper Store?',
-          style: TextStyle(fontWeight: FontWeight.bold),
+    if (_scaffoldkey.currentState!.isDrawerOpen) {
+      // If drawer is open, close it and prevent exiting the app
+      _scaffoldkey.currentState!.openEndDrawer();
+      return false;
+    } else {
+      // If drawer is closed, show exit confirmation dialog
+      return (await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'Exit Shopper Store?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text('Are you sure you want to exit the app?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Yes'),
+            ),
+          ],
         ),
-        content: const Text('Are you sure you want to exit the app?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            // SystemNavigator.pop();
-            child: const Text('Yes'),
-          ),
-        ],
-      ),
-    )) ??
-        false;
+      )) ??
+          false;
+    }
   }
 
   @override
@@ -147,12 +157,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 CircleAvatar(
+                  backgroundColor: Colors.white,
                   radius: 60,
-                  child: ClipOval(
-                    child: Image.asset(
-                      "asset/images/mobileshopping.png",
-                      height: 120,
-                    ),
+                  child: Image.asset(
+                    "asset/images/shopping.png",
+                    height: 100,
                   ),
                 ),
                 const SizedBox(
