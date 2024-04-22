@@ -216,8 +216,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
             children: [
 
               SizedBox(
-                height: 180,
-                width: 300,
+                height: 160,
+                width: 200,
                 child: selectedImage.isNotEmpty
                     ? ListView.builder(
                   scrollDirection: Axis.horizontal,

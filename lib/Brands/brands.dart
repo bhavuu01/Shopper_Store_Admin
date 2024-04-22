@@ -52,6 +52,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Column(
@@ -218,7 +219,7 @@ class BrandList extends StatelessWidget {
                                           'Confirm Deletion',
                                         ),
                                         content: const Text(
-                                            'Are you sure you want to delete this category?'),
+                                            'Are you sure you want to delete this brand?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {

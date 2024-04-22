@@ -112,7 +112,7 @@ class _AddCategoryState extends State<AddCategory> {
               const SizedBox(height: 20,),
               selectedImage != null
                   ? Image.file(selectedImage!,height: 200,width: 200,)
-                  : Image.asset("asset/images/nophoto.png",height: 200,width: 200,),
+                  : Image.asset("asset/images/nophoto.png",height: 160,width: 200,),
 
 
 

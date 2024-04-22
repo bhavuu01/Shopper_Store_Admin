@@ -50,6 +50,7 @@ class _SalesScreenState extends State<SalesScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
           child: Column(
@@ -191,7 +192,7 @@ class SalesList extends StatelessWidget {
                                       return AlertDialog(
                                         title: const Text('Confirm Deletion',),
                                         content: const Text(
-                                            'Are you sure you want to delete this category?'),
+                                            'Are you sure you want to delete this sale?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {

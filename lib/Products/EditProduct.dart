@@ -493,6 +493,7 @@ class _EditProductState extends State<EditProduct> {
               ),
 
               TextFormField(
+                maxLines: 5,
                 controller: descriptionController,
                 decoration: InputDecoration(
                   labelText: 'Edit Description',
@@ -512,6 +513,7 @@ class _EditProductState extends State<EditProduct> {
               ),
 
               TextFormField(
+                maxLines: 3,
                 controller: productAllDetailsController,
                 decoration: InputDecoration(
                   labelText: "All Details",
