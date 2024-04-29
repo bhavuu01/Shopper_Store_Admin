@@ -24,14 +24,14 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Order $orderId status updated to $newStatus'),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
           backgroundColor: Colors.green,
         ),
       );
     } catch (error) {
       print('Error updating order status: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Failed to update order status. Please try again.'),
           duration: Duration(seconds: 2),
           backgroundColor: Colors.red,
@@ -47,7 +47,7 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.cyan,
-        title: Text('All Orders',
+        title: const Text('All Orders',
           style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -59,12 +59,12 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
         stream: _ordersStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
           if (!snapshot.hasData || snapshot.data == null || snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text("No orders available."),
             );
           }
@@ -82,7 +82,7 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
 
               return Card(
                 elevation: 3,
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -90,35 +90,35 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
                     children: [
                       Text(
                         "Order ID: $orderId",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "Status: $status",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "User Email: $userEmail",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "Address: $address",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "Payment Method: $paymentMethod",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "Amount: $amount",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 8),
-                      Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         "Products:",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -131,9 +131,9 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Divider(color: Colors.grey),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
+                      const Divider(color: Colors.grey),
+                      const SizedBox(height: 16),
                       if (status != 'Cancelled') // Conditionally rendering dropdown
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
