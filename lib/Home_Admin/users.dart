@@ -23,24 +23,18 @@ class _UsersScreenState extends State<UsersScreen> {
     setState(() {});
   }
 
-  Future<void> _deleteUser(String userId) async {
-    final userDoc =
-    FirebaseFirestore.instance.collection('User').doc(userId);
-    await userDoc.delete();
-    await _fetchUsers();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.cyan,
-        title: Text('Users',
-        style: TextStyle(
+        title: Text(
+          'Users',
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-          color: Colors.white,
-          fontSize: 25
+            color: Colors.white,
+            fontSize: 25,
           ),
         ),
         centerTitle: true,
@@ -61,7 +55,6 @@ class _UsersScreenState extends State<UsersScreen> {
             separatorBuilder: (context, index) => Divider(),
             itemBuilder: (context, index) {
               final userData = users[index].data();
-              final userId = users[index].id;
               return Card(
                 elevation: 4,
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -69,46 +62,28 @@ class _UsersScreenState extends State<UsersScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListTile(
-                  title: Text('Name: ${userData['Name']}',style: TextStyle(fontWeight: FontWeight.bold)),
+                  title: Text(
+                    'Name: ${userData['Name']}',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Email: ${userData['Email']}',style: TextStyle(fontWeight: FontWeight.bold),),
+                      Text(
+                        'Email: ${userData['Email']}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       SizedBox(height: 4),
-                      Text('Mobile: ${userData['Mobile']}',style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        'Mobile: ${userData['Mobile']}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       SizedBox(height: 4),
-                      Text('UserId: ${userData['UID']}',style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        'UserId: ${userData['UID']}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Confirm"),
-                            content: Text(
-                                "Are you sure you want to delete this user?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text("Cancel"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  _deleteUser(userId);
-                                },
-                                child: Text("Delete"),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
                   ),
                 ),
               );

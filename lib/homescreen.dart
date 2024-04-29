@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: const Icon(Icons.home),
                   title: const Text('Home'),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context, MaterialPageRoute(builder: (context) => HomeScreen()));
                   },
                 ),

@@ -13,6 +13,7 @@ class SalesScreen extends StatefulWidget {
 }
 
 class _SalesScreenState extends State<SalesScreen> {
+  String _searchQuery = '';
 
   void _deleteSale(String saleID) {
     FirebaseFirestore.instance.collection('Sales').doc(saleID).delete().then((value) {
@@ -34,30 +35,26 @@ class _SalesScreenState extends State<SalesScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text('Sales',style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.white
-         ),
+        title: const Text(
+          'Sales',
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.cyan,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20,),
-
               Container(
                 decoration: BoxDecoration(
                   color: Colors.cyan.withOpacity(.1),
@@ -67,8 +64,10 @@ class _SalesScreenState extends State<SalesScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
-                    onChanged: (value){
-                      setState(() {});
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value.toLowerCase();
+                      });
                     },
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -79,20 +78,18 @@ class _SalesScreenState extends State<SalesScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
-
-              SalesList(deleteSale: _deleteSale,),
-
+              const SizedBox(height: 20,),
+              SalesList(deleteSale: _deleteSale, searchQuery: _searchQuery),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
-        onPressed: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddSales(),));
-      },
-        child: Icon(Icons.add,color: Colors.black,size: 25,),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddSales(),));
+        },
+        child: const Icon(Icons.add, color: Colors.black, size: 25,),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -100,9 +97,10 @@ class _SalesScreenState extends State<SalesScreen> {
 }
 
 class SalesList extends StatelessWidget {
-
   final Function(String) deleteSale;
-  const SalesList({Key? key, required this.deleteSale}) : super(key: key);
+  final String searchQuery;
+
+  const SalesList({Key? key, required this.deleteSale, required this.searchQuery}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +117,12 @@ class SalesList extends StatelessWidget {
             final sale = SalesModel.fromSnapshot(doc);
             sales.add(sale);
           }
+
+          // Filter sales based on search query
+          if (searchQuery.isNotEmpty) {
+            sales = sales.where((sale) => sale.sales.toLowerCase().contains(searchQuery)).toList();
+          }
+
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -126,8 +130,7 @@ class SalesList extends StatelessWidget {
             itemBuilder: (context, index) {
               final sale = sales[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Card(
                   elevation: 5,
                   child: Column(
@@ -139,16 +142,11 @@ class SalesList extends StatelessWidget {
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic
-                        ),
-                        ),
+                        )),
                       ),
-                      // const Spacer(),
-
-                      // const Spacer(),
                       const SizedBox(height: 10,),
                       Center(
-                        child: Image.network(
-                            sale.image, width: 300, height: 200),
+                        child: Image.network(sale.image, width: 300, height: 200),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -160,17 +158,15 @@ class SalesList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                 Navigator.push(context, MaterialPageRoute(builder: (context) => EditSales(sales: sale, image: sale.image,),));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditSales(sales: sale, image: sale.image,),));
                                 },
                                 child: const Text(
                                   'Edit',
-                                  style: TextStyle(fontSize: 12,
-                                      color: Colors.cyan),
+                                  style: TextStyle(fontSize: 12, color: Colors.cyan),
                                 ),
                               ),
                             ),
@@ -181,7 +177,6 @@ class SalesList extends StatelessWidget {
                               width: 70,
                               height: 35,
                               decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: TextButton(
@@ -190,13 +185,11 @@ class SalesList extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Confirm Deletion',),
-                                        content: const Text(
-                                            'Are you sure you want to delete this sale?'),
+                                        title: const Text('Confirm Deletion'),
+                                        content: const Text('Are you sure you want to delete this sale?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              // Dismiss the dialog
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text('Cancel'),
@@ -213,9 +206,7 @@ class SalesList extends StatelessWidget {
                                     },
                                   );
                                 },
-                                child: const Text('Delete', style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.red)),
+                                child: const Text('Delete', style: TextStyle(fontSize: 12, color: Colors.red)),
                               ),
                             ),
                           ),

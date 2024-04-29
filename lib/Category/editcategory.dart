@@ -11,7 +11,7 @@ class EditCategory extends StatefulWidget {
   final CategoryModel category;
   final String image;
 
-  EditCategory({Key? key, required this.category, required this.image}) : super (key:key);
+  const EditCategory({Key? key, required this.category, required this.image}) : super (key:key);
 
   @override
   State<EditCategory> createState() => _EditCategoryState();
@@ -98,8 +98,8 @@ class _EditCategoryState extends State<EditCategory> {
          child: Column(
            crossAxisAlignment: CrossAxisAlignment.center,
            children: [
-             SizedBox(height: 20,),
-             Container(
+             const SizedBox(height: 20,),
+             SizedBox(
                width: double.infinity,
                height: 60,
                child: TextFormField(
@@ -127,7 +127,7 @@ class _EditCategoryState extends State<EditCategory> {
 
              const SizedBox(height: 20),
              // Button for selecting an image
-             Container(
+             SizedBox(
                width: double.infinity,
                child: ElevatedButton (
                  onPressed: () async {

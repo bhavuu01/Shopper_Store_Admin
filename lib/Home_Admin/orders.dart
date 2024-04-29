@@ -147,7 +147,7 @@ class OrderListScreenSellerState extends State<OrderListScreenSeller> {
                               value: status,
                               items: <String>[
                                 'Pending',
-                                'Ordered Confirmed',
+                                'Order Confirmed',
                                 'Shipped',
                                 'Out For Delivery',
                                 'Delivered',
